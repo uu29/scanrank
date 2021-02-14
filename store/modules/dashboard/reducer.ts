@@ -1,15 +1,20 @@
 import { IRequest, IResponse, IError } from "../../../apis/modules/dashboard";
 import { createAsyncAction, createActionEntity, createCustomReducer } from "../../lib";
 
-export interface IDashboard {
+export interface IList {
   id: string;
+}
+
+export interface IDashboard {
+  list: IList[];
+  message: string;
 }
 
 const FETCH = createAsyncAction("dashboard/FETCH");
 export const fetch = createActionEntity<IRequest, IResponse, IError>(FETCH);
 
 const actions = { fetch };
-const state = { dashboard: [] as IDashboard[], message: "" };
+const state = { list: [] as IList[], message: "" };
 
 const reducer = createCustomReducer(state, actions)
   .handleAction(fetch.success, (state, action) => {
