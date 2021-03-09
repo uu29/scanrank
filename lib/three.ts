@@ -49,10 +49,10 @@ export default function init() {
   let earthClouds = new THREE.Mesh(earthCloudGeo, earthMaterialClouds);
 
   // 구름 사이즈 설정
-  earthClouds.scale.set(1.025, 1.025, 1.025);
+  earthClouds.scale.set(1.015, 1.015, 1.015);
 
   // 지구의 자식 객체로 추가하기
-  // earth.add(earthClouds);
+  earth.add(earthClouds);
 
   // 무대 조명 설치
   createLights(scene);
@@ -70,6 +70,21 @@ export default function init() {
   renderer.setAnimationLoop(animation);
   // 5.   렌더링
   document.body.appendChild(renderer.domElement);
+
+  // 좌표값 추가
+  const kr = {
+    latitude: 37.5326,
+    longitude: 127.024612,
+    color: "orange",
+  };
+  const ny = {
+    latitude: 40.6643,
+    longitude: -73.9385,
+    color: "red",
+  };
+  addCountryCoord(0, 0, "white", earthClouds);
+  addCountryCoord(kr.latitude, kr.longitude, kr.color, earthClouds);
+  addCountryCoord(ny.latitude, ny.longitude, ny.color, earthClouds);
 }
 
 function animation(time) {
@@ -99,4 +114,31 @@ function createLights(scene) {
   scene.add(lights[2]);
   scene.add(lights[3]);
   scene.add(lights[4]);
+}
+
+function addCountryCoord(latitude, longitude, color, earthClouds) {
+  let pointOfInterest = new THREE.SphereGeometry(0.1, 32, 32); // 작은 입체 구를 만든다.
+  const radius = 10;
+
+  let material = new THREE.MeshBasicMaterial({
+    color: color,
+  });
+
+  let mesh = new THREE.Mesh(pointOfInterest, material);
+  const [x, y, z] = calcPosFromLatLonRad(latitude, longitude, radius);
+
+  mesh.position.set(x, y, z);
+  earthClouds.add(mesh);
+}
+
+function calcPosFromLatLonRad(lat, lon, radius) {
+  let x, y, z;
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
+
+  x = -(radius * Math.sin(phi) * Math.cos(theta));
+  z = radius * Math.sin(phi) * Math.sin(theta);
+  y = radius * Math.cos(phi);
+
+  return [x, y, z];
 }
