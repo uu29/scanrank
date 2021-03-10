@@ -23,7 +23,6 @@ export default function init() {
 
   // 재질 설정(컬러)
   const basic_map = new THREE.TextureLoader().load("/textures/custom-texture.png");
-  const spec_map = new THREE.TextureLoader().load("/texture/earthspec4k_white.jpg");
   material = new THREE.MeshPhongMaterial({
     map: basic_map,
   });
@@ -60,8 +59,8 @@ export default function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   const controls = new OrbitControls(camera, renderer.domElement);
   // 카메라 줌 가능 범위 지정(너무 가깝거나 멀리 줌 하는 것 방지)
-  controls.minDistance = 12;
-  controls.maxDistance = 30;
+  controls.minDistance = 24;
+  controls.maxDistance = 24;
   controls.enablePan = false;
   controls.update();
   controls.saveState();
@@ -85,6 +84,18 @@ export default function init() {
   addCountryCoord(0, 0, "white", earthClouds);
   addCountryCoord(kr.latitude, kr.longitude, kr.color, earthClouds);
   addCountryCoord(ny.latitude, ny.longitude, ny.color, earthClouds);
+
+  // 이벤트리스너 추가하기
+  window.addEventListener("resize", onWindowResize, false);
+
+  // 윈도우 리사이즈 해도 perspective가 그대로 보이도록(반응형)
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  document.getElementById("globeDom").appendChild(renderer.domElement);
 }
 
 function animation(time) {

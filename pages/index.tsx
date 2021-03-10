@@ -1,16 +1,13 @@
-import { useEffect, useLayoutEffect } from "react";
-import init from "../lib/three";
+import Globe from "../components/three/Globe";
+import styled from "@emotion/styled";
 
 export default function Home() {
-  const canUseDOM: boolean = !!(
-    typeof window !== "undefined" &&
-    typeof window.document !== "undefined" &&
-    typeof window.document.createElement !== "undefined"
+  return (
+    <Wrapper>
+      Cumulonimbus clouds
+      <Globe />
+    </Wrapper>
   );
-
-  const useIsomorphicLayoutEffect = canUseDOM ? useLayoutEffect : useEffect;
-  useIsomorphicLayoutEffect(() => {
-    init();
-  }, []);
-  return <div>scanrank with typescript</div>;
 }
+
+const Wrapper = styled.section``;
