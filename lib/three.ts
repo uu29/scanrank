@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "@three-ts/orbit-controls";
+import { XRWebGLLayer } from "three";
 
 let camera, scene, renderer;
 let geometry, material, earth;
@@ -27,6 +28,7 @@ export default function init() {
     map: basic_map,
   });
   earth = new THREE.Mesh(geometry, material);
+  // earth.position.x = -10;
 
   // 무대에 메쉬를 올린다
   scene.add(earth);
@@ -56,12 +58,21 @@ export default function init() {
   // 무대 조명 설치
   createLights(scene);
 
+  createSkyBox(scene);
+
   renderer = new THREE.WebGLRenderer({ antialias: true });
   const controls = new OrbitControls(camera, renderer.domElement);
   // 카메라 줌 가능 범위 지정(너무 가깝거나 멀리 줌 하는 것 방지)
-  controls.minDistance = 24;
-  controls.maxDistance = 24;
+  controls.enableZoom = false;
   controls.enablePan = false;
+
+  // camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), degInRad(90));
+  function degInRad(deg) {
+    return (deg * Math.PI) / 180;
+  }
+  // camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), degInRad(90));
+  // camera.up = new THREE.Vector3(0, 0, 1);
+
   controls.update();
   controls.saveState();
   // 4. 화면 사이즈 설정
@@ -98,10 +109,40 @@ export default function init() {
   document.getElementById("globeDom").appendChild(renderer.domElement);
 }
 
+function createSkyBox(scene) {
+  const cubeLoaderOnLoad = () => {
+    console.log("cubeLoaderOnLoad");
+  };
+
+  const cubeLoaderOnProgress = () => {
+    console.log("onProgress");
+  };
+  const cubeLoaderOnError = (err) => {
+    console.log("onError");
+    console.log(err);
+  };
+
+  const cubeLoader = new THREE.CubeTextureLoader().load(
+    [
+      "/textures/cubeMaps/px.png",
+      "/textures/cubeMaps/nx.png",
+      "/textures/cubeMaps/py.png",
+      "/textures/cubeMaps/ny.png",
+      "/textures/cubeMaps/pz.png",
+      "/textures/cubeMaps/nz.png",
+    ],
+    cubeLoaderOnLoad,
+    cubeLoaderOnProgress,
+    cubeLoaderOnError
+  );
+
+  scene.background = cubeLoader;
+}
+
 function animation(time) {
   // 애니메이션 조절
   // earth.rotation.x = time / 2000;
-  // earth.rotation.y = time / 1000;
+  earth.rotation.y = time / 8000;
 
   renderer.render(scene, camera);
 }
