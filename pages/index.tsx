@@ -20,6 +20,5 @@ const Title = styled.h1`
   text-align: center;
   height: 100vh;
   float: right;
-  line-height: 100vh;
-  padding-right: 12rem;
+  padding: 20rem;
 `;

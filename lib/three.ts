@@ -15,9 +15,10 @@ export default function init() {
   camera = new THREE.PerspectiveCamera(FIELD_OF_VIEW, ASPECT, NEAR, FAR);
   // 2. 카메라 설치
   camera.position.z = 24;
-
   // 3. 무대를 만든다.
   scene = new THREE.Scene();
+  // scene.position.x = -10;
+  // scene.position.z = 10;
 
   // 구 만들기
   geometry = new THREE.SphereGeometry(10, 32, 32);
@@ -62,16 +63,16 @@ export default function init() {
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   const controls = new OrbitControls(camera, renderer.domElement);
+
   // 카메라 줌 가능 범위 지정(너무 가깝거나 멀리 줌 하는 것 방지)
   controls.enableZoom = false;
   controls.enablePan = false;
 
-  // camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), degInRad(90));
-  function degInRad(deg) {
-    return (deg * Math.PI) / 180;
-  }
-  // camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), degInRad(90));
-  // camera.up = new THREE.Vector3(0, 0, 1);
+  const default_polat_angle = 1.5707963267948966;
+  controls.maxPolarAngle = default_polat_angle + 0.02; // 수직 궤도 최대 각
+  controls.minPolarAngle = default_polat_angle - 0.06; // 수직 궤도 최소 각, 일치시키면 각이 고정됨
+
+  console.log(controls.object);
 
   controls.update();
   controls.saveState();
