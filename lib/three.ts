@@ -7,7 +7,9 @@ let geometry, material, earth;
 
 export default function init() {
   const FIELD_OF_VIEW = 75; // 카메라 시야각
-  const ASPECT = window.innerWidth / window.innerHeight; // 시야의 가로세로비(카메라 화면 비율)
+  const sceneWidth = window.innerWidth / 1.8;
+  const sceneHeight = window.innerHeight;
+  const ASPECT = sceneWidth / sceneHeight; // 시야의 가로세로비(카메라 화면 비율)
   const NEAR = 0.1; // 가장 가까이 보일 물체(사람으로 따지면 가장 가까이 볼 수 있는 거리)
   const FAR = 1000; // 가장 멀리 볼 수 있는 거리
 
@@ -77,7 +79,7 @@ export default function init() {
   controls.update();
   controls.saveState();
   // 4. 화면 사이즈 설정
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(sceneWidth, sceneHeight);
   renderer.setAnimationLoop(animation);
   // 5.   렌더링
   document.body.appendChild(renderer.domElement);
@@ -102,9 +104,9 @@ export default function init() {
 
   // 윈도우 리사이즈 해도 perspective가 그대로 보이도록(반응형)
   function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.innerWidth / 1.8 / sceneHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth / 1.8, sceneHeight);
   }
 
   document.getElementById("globeDom").appendChild(renderer.domElement);

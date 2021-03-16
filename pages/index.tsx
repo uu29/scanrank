@@ -1,24 +1,20 @@
 import Globe from "../components/three/Globe";
+import Top from "../components/Top";
+import Statics from "../components/Statics";
 import styled from "@emotion/styled";
 
 export default function Home() {
   return (
     <Wrapper>
-      <Title>a-ttack!</Title>
+      <Top />
+      <Statics />
       <Globe />
     </Wrapper>
   );
 }
 
-const Wrapper = styled.section``;
-
-const Title = styled.h1`
+const Wrapper = styled.section`
   color: #fff;
-  font-weight: 900;
-  font-size: 4.5rem;
-  font-style: italic;
-  text-align: center;
-  height: 100vh;
-  float: right;
-  padding: 20rem;
+  background: rgb(10, 12, 30);
+  background: linear-gradient(353deg, rgba(10, 12, 30, 1) 0%, rgba(11, 15, 54, 1) 35%, rgba(10, 10, 26, 1) 100%);
 `;
