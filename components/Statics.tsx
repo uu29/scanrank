@@ -1,10 +1,17 @@
+import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import UseScrolls from "../hooks/useScrolls";
 
 export default function Statics() {
-  const scrollY = UseScrolls();
+  const [scrollY] = UseScrolls();
+  const [animated, setAnimated] = useState(false as boolean);
+  useEffect(() => {
+    if (scrollY >= 280) setAnimated(true);
+    else setAnimated(false);
+  }, [scrollY]);
+
   return (
-    <Wrapper>
+    <Wrapper animated={animated}>
       <Title>
         오늘 하루 방문자 통계<Count fontSize={3.8}>1538</Count>
       </Title>
@@ -27,10 +34,10 @@ export default function Statics() {
   );
 }
 
-const Wrapper = styled.section`
+const Wrapper = styled.section<{ animated: boolean }>`
   max-width: 700px;
   margin: 5em auto;
-  padding: 4em;
+  padding: 2em;
   text-align: center;
   border-radius: 3em;
   background: rgb(7, 3, 20);
@@ -45,6 +52,11 @@ const Wrapper = styled.section`
   opacity: 0;
   transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   transform: scale(0.96) translateY(24px);
+
+  ${(props) =>
+    props.animated &&
+    `opacity: 1;
+    transform: scale(1) translateY(0);`}
 `;
 
 const Title = styled.h2`
